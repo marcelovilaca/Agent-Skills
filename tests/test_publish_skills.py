@@ -1,6 +1,16 @@
+import importlib.util
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+SCRIPTS_DIR = Path(__file__).resolve().parents[1] / "scripts"
+sys.path.insert(0, str(SCRIPTS_DIR))
+_validate_spec = importlib.util.spec_from_file_location("validate_skills", SCRIPTS_DIR / "validate_skills.py")
+assert _validate_spec is not None and _validate_spec.loader is not None
+_validate_module = importlib.util.module_from_spec(_validate_spec)
+_validate_spec.loader.exec_module(_validate_module)
+validate = _validate_module.validate
 
 from scripts.publish_skills import (
     bump_patch,
@@ -114,6 +124,27 @@ Keep this instruction.
             with self.assertRaisesRegex(ValueError, "README.md"):
                 prepare_skill(source_dir, "skill", None, Path(directory))
 
+
+    def test_validator_requires_markdown_link_to_sibling_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            skill_dir = root / "skills" / "demo"
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text(
+                "---\nname: demo\ndescription: Demo skill.\n---\nBody\n",
+                encoding="utf-8",
+            )
+            readme = skill_dir / "README.md"
+            readme.write_text(
+                "# Demo\n\n## How to Use\nUse it.\n\n## Technical Details\nDetails.\n\nSee SKILL.md.\n",
+                encoding="utf-8",
+            )
+            self.assertTrue(any("Markdown link to sibling SKILL.md" in issue for issue in validate(root)))
+            readme.write_text(
+                "# Demo\n\n## How to Use\nUse it.\n\n## Technical Details\nDetails.\n\nSee [SKILL.md](SKILL.md).\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(validate(root), [])
 
 if __name__ == "__main__":
     unittest.main()

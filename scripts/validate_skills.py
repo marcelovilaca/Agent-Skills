@@ -44,8 +44,8 @@ def validate(root: Path = ROOT) -> list[str]:
                 raise ValueError("README.md must include a '## How to Use' section")
             if not re.search(r"(?im)^##\s+Technical Details\s*$", guide_text):
                 raise ValueError("README.md must include a '## Technical Details' section")
-            if "SKILL.md" not in guide_text:
-                raise ValueError("README.md must link or refer to SKILL.md")
+            if not re.search(r"\[[^\]\n]+\]\(SKILL\.md\)", guide_text):
+                raise ValueError("README.md must include a Markdown link to sibling SKILL.md")
             compatibility = metadata.get("compatibility")
             if compatibility is not None and (not isinstance(compatibility, str) or not 1 <= len(compatibility) <= 500):
                 raise ValueError("compatibility must be a string of 1–500 characters")
