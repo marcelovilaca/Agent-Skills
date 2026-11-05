@@ -1,9 +1,9 @@
 ---
-name: github-skill-versioner
-description: Version and publish portable Hermes-authored agent skills.
+name: "github-skill-versioner"
+description: "Version and publish portable Hermes-authored agent skills."
 compatibility: "Requires Hermes Agent for automatic lifecycle publishing; manual Git and Python workflow otherwise."
 metadata:
-  author: "marcelovilaca, Hermes Agent"
+  author: "marcelovilaca"
   version: "0.1.0"
 ---
 
@@ -31,12 +31,12 @@ Keep skills authored in Hermes in the public `marcelovilaca/Agent-Skills` reposi
 - New published skills start at `0.1.0` unless their source explicitly provides a valid semver version.
 - On a content change, the publisher increments the patch version unless the author has explicitly advanced the version.
 - Run the repository's `scripts/publish_skills.py --repo <repository-path> --home <HERMES_HOME> --dry-run` to preview. Remove `--dry-run` to stage, commit, push, and verify the remote branch.
-- The Hermes publisher plugin invokes the same script after a skill is created or patched. It fails closed on detected secrets, machine paths, invalid frontmatter, unsafe resources, or Git conflicts; inspect its log and fix the source rather than bypassing the checks.
+- The Hermes publisher plugin invokes the same script after a skill is created or patched. It fails closed on detected secrets, unsafe files, invalid frontmatter, or Git conflicts; inspect its log and fix the source rather than bypassing the checks.
 - Do not claim a backup succeeded until the pushed commit is verified on GitHub.
 
 ## Verification
 
-- Confirm each exported skill has valid standard `SKILL.md`, a portable name, and matching directory name.
+- Confirm each exported skill has a valid standard `SKILL.md`, portable name, and matching directory name.
 - Run `python -m unittest discover -s tests -v` in the repository.
 - Confirm the repository's `main` branch contains the commit reported by the publisher.
-- The standard format allows skills to be imported by Hermes Agent, OpenAI Codex, Claude Code, OpenClaw, and Pi; it does not guarantee that every host can execute every tool named by a skill.
+- The standard format allows skills to be imported by Hermes Agent, OpenAI Codex, Claude Code, OpenClaw, and Pi; it does not guarantee that every host can execute every tool named in an individual skill.

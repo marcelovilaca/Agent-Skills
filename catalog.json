@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "skills": {
+    "ai-generated-content": {
+      "source_sha256": "ec32c0747584c6c28536847f405982da75787f83c04e3792b180806b40cb379d",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.0.0"
+    },
+    "docker-install-from-docs": {
+      "source_sha256": "3c5f182619e31c60fe98e19b6eddeba45a19ab29521d956f7ab4b218b123212f",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.0.0"
+    },
+    "ebook-to-audiobook-master": {
+      "source_sha256": "2337d5a5e3b011c257512300115015ffe8864cfe56e2fb50dfab7788790a971e",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "0.1.0"
+    },
+    "github-skill-versioner": {
+      "source_sha256": "366b6607f76994467c30e110a44e230939c9a0c12c1fbaa509b884ad921dd695",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "0.1.0"
+    },
+    "local-stack-testing": {
+      "source_sha256": "2c2d2cb87adad3f9d61137ceca9468b951a460ed504791b70626879e0f5b507c",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.0.0"
+    },
+    "local-video-dubber": {
+      "source_sha256": "49ce52e5fd3b9b1391ad7384c5734d9bf3aff46093600e669f3d72f40ae23160",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "0.1.0"
+    },
+    "pdf-to-epub-master": {
+      "source_sha256": "9b0e66a2e4ca5a5564fd0bc3604e7ab803d509764ab54437cce878b89f804652",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "0.1.0"
+    },
+    "react-vite-miniapp-setup": {
+      "source_sha256": "1b11fbabfc8ebe5c9389fc19c66d1ac7990e8164e4baf80cef55057fc86dbdba",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.1.0"
+    },
+    "skill-management": {
+      "source_sha256": "5ec5daa33fcf7c4ff7b07822ccbdf79d3c2390e37381f403bcf0a858e4f3e2fb",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.0.0"
+    },
+    "telegram-miniapp-suite": {
+      "source_sha256": "bb9edc819b023438e9fda718e69b803b44f8692ddf92b10ace487c63ff29a410",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.0.0"
+    },
+    "tt-rss-docker-install": {
+      "source_sha256": "696e9fa9d424b68274b21897f7c3b90921db0d125628a4d839c89da386c00bdb",
+      "updated_at": "2026-11-05T12:08:14+00:00",
+      "version": "1.0.0"
+    }
+  },
+  "updated_at": "2026-11-05T12:08:14+00:00"
+}
