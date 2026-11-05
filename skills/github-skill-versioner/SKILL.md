@@ -4,7 +4,7 @@ description: "Version and publish portable Hermes-authored agent skills."
 compatibility: "Requires Hermes Agent for automatic lifecycle publishing; manual Git and Python workflow otherwise."
 metadata:
   author: "marcelovilaca"
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # GitHub Skill Versioner
@@ -34,14 +34,14 @@ Write from the source `SKILL.md` and inspect any included scripts, references, a
 - `## How to Use` — triggers, inputs, short quick start, and a usable example.
 - `## Technical Details` — prerequisites, tools/commands, files and outputs, workflow, verification, safety, and limitations.
 
-Link to the sibling `SKILL.md`. Keep paths relative and omit credentials, personal data, and machine-specific paths. Store the README beside the local Hermes skill before publishing; the publisher copies it, hashes it, and refuses a skill source without it. For existing repository skills that lack guides, create them during the documentation migration.
+Link to the sibling with a relative Markdown target such as `[SKILL.md](SKILL.md)`; a plain text mention is not a link and will fail validation. Keep paths relative and omit credentials, personal data, and machine-specific paths. Store the README beside the local Hermes skill before publishing; the publisher copies it, hashes it, and refuses a skill source without it. For existing repository skills that lack guides, create them during the documentation migration.
 
 ## Versioning and Publishing
 
 1. Determine authorship from the active profile's skill-usage registry: export only active skills marked `created_by: agent` or `learn`; never mirror installed, bundled, third-party, or otherwise unowned skills.
 2. New published skills start at `0.1.0` unless the source provides a valid semver version. On a content change, increment the patch version unless the author explicitly advanced it.
 3. Before the dry run, inventory the full set of skills discovered from the active usage registry: the publisher checks every active `created_by: agent` or `learn` source, not only the skills changed in this publish. Ensure each discovered source directory already has its own guide; for every added or changed skill, create or update that guide beside the source `SKILL.md` (not only in the repository checkout). If backfilling documentation for skills already in the repository, place each guide in its matching active Hermes source directory so the publisher can copy it. Every guide must include `## How to Use`, `## Technical Details`, and a sibling `SKILL.md` link; verify claims against the actual source files before proceeding.
-4. For an initial or manual publish, run `scripts/publish_skills.py --repo <repository-path> --home <HERMES_HOME> --dry-run`. Inspect the proposed skill set, README files, redactions, and portability warnings; fix source content rather than weakening checks. Remove `--dry-run` only after review to stage, commit, push, and verify.
+4. For an initial or manual publish, run `scripts/publish_skills.py --repo <repository-path> --home <HERMES_HOME> --dry-run`. Review the managed/changed slugs and proposed versions, then inspect source README files and support resources directly; the dry-run summary is not a full per-file diff. Compare each selected source directory's relative file inventory with `skills/<slug>/` in the repository before publishing, because the publisher replaces the destination directory. If an intended repository-only file exists, merge it into the active source first and rerun the dry run. Fix content, redaction, or portability issues rather than weakening checks. Remove `--dry-run` only after reviewing the complete package set.
 5. The Hermes publisher plugin invokes the same script after successful `created`, `patched`, and `edited` lifecycle events; `edited` includes supporting-file writes/removals. The publisher fails closed on missing README guides, secrets, unsafe files, invalid frontmatter, remote divergence, or unrelated working-tree changes. Read its log and fix the cause; do not bypass publisher checks.
 6. Verify the exact reported commit on the remote branch and confirm every published `skills/*/` folder contains both `SKILL.md` and `README.md` before saying the backup succeeded.
 
@@ -57,5 +57,5 @@ Link to the sibling `SKILL.md`. Keep paths relative and omit credentials, person
 - Confirm each exported skill has a valid standard `SKILL.md`, portable name, and matching directory name.
 - Confirm every exported skill folder contains an accurate `README.md` with the required usage/technical sections and no unsupported claims.
 - Run `python -m unittest discover -s tests -v` and the repository's skill validator.
-- Confirm the remote `main` branch contains the commit reported by the publisher, inspect the exact published skill paths, and check the corresponding GitHub Actions validation run.
+- Confirm the remote `main` points to the publisher's exact commit, not merely a newer local `HEAD`; verify that every published `skills/<slug>/` path contains both `SKILL.md` and `README.md` (and that intended support files remain). Check the corresponding GitHub Actions validation run and require its `headSha` to match that exact commit with a successful conclusion.
 - The standard format allows skills to be imported by Hermes Agent, OpenAI Codex, Claude Code, OpenClaw, and Pi; it does not guarantee that every host can execute every tool named in an individual skill.
