@@ -79,6 +79,8 @@ Keep this instruction.
         result = sanitize_local_paths(r"Project at C:\Users\alice\private", Path("C:/Users/alice"))
         self.assertIn("<USER_HOME>", result)
         self.assertNotIn("alice", result)
+        translated = sanitize_local_paths(r"Output Z:\Translations\title", Path("C:/Users/alice"))
+        self.assertIn("<TRANSLATIONS_ROOT>", translated)
 
     def test_version_does_not_increase_again_for_unchanged_source(self):
         with tempfile.TemporaryDirectory() as directory:

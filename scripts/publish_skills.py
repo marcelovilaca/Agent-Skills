@@ -165,8 +165,10 @@ def sanitize_local_paths(text: str, home: Path | None = None) -> str:
     sep = re.escape("\\")
     audio_root = re.compile(r"(?i)[A-Z]:" + sep + r"AudioBooks")
     project_root = re.compile(r"(?i)[A-Z]:" + sep + r"AI" + sep + r"Scripts")
+    translations_root = re.compile(r"(?i)[A-Z]:" + sep + r"Translations")
     text = audio_root.sub("<AUDIOBOOKS_ROOT>", text)
     text = project_root.sub("<PROJECT_ROOT>", text)
+    text = translations_root.sub("<TRANSLATIONS_ROOT>", text)
     return text
 
 
