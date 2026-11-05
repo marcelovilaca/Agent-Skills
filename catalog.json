@@ -17,9 +17,9 @@
       "version": "0.1.0"
     },
     "github-skill-versioner": {
-      "source_sha256": "366b6607f76994467c30e110a44e230939c9a0c12c1fbaa509b884ad921dd695",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "0.1.0"
+      "source_sha256": "bf84867ae62f83cde710e70c507654a7c2edf8c88217c3aedfd3e31b9b961372",
+      "updated_at": "2026-11-05T12:18:49+00:00",
+      "version": "0.1.1"
     },
     "local-stack-testing": {
       "source_sha256": "2c2d2cb87adad3f9d61137ceca9468b951a460ed504791b70626879e0f5b507c",
@@ -57,5 +57,5 @@
       "version": "1.0.0"
     }
   },
-  "updated_at": "2026-11-05T12:08:14+00:00"
+  "updated_at": "2026-11-05T12:18:49+00:00"
 }
