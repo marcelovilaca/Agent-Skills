@@ -5,10 +5,14 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_category: "content-creation"
   hermes_tags: "youtube, livestream, guest, journalism, seo, thumbnails, pt-br"
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # Livestream Toolkit 3.0 — produtor de lives com convidados
+
+## When to Use
+
+Use this skill when preparing or continuing a YouTube livestream or interview in Brazilian Portuguese, or when asked to use `/livestream-toolkit`. It creates an editorial package with research, SEO, titles, scripts, audience engagement and thumbnail concepts; image generation depends on the tools actually available.
 
 ## Ativação e contrato
 
@@ -38,7 +42,7 @@ Ao receber `/livestream-toolkit`, `prepare uma live`, `continuar kit`, ou pedido
 
 ## Estilo visual imutável
 
-Ler `references/visual-identity.md` antes de criar cada prompt, se esse arquivo existir. Se estiver ausente, usar o resumo abaixo e informar que a referência complementar não foi incluída: fonte ultra-bold condensed sans-serif (Impact/Bebas Neue/Montserrat ExtraBold style); TEXTO em caixa alta branco `#FFFFFF`; contorno **preto grosso**, contorno externo **amarelo elétrico**, sombra **vermelha grossa**, profundidade 3D e discreto brilho de fogo, no terço superior; split lighting teal/blue à esquerda e amber/orange à direita nos rostos e fundo; teal-orange grade, vinheta escura, leve dessaturação de cenário, lens flare, motion blur APENAS ao fundo, neblina cinematográfica, film grain; fotorealismo de pôster documental. **Nenhum split screen** (a iluminação dividida é permitida). Não incluir marca d'água nem logos não autorizados. Resoluções finais EXATAS: horizontal 1280×720; vertical 720×1280.
+Usar o resumo abaixo como especificação visual: fonte ultra-bold condensed sans-serif (Impact/Bebas Neue/Montserrat ExtraBold style); TEXTO em caixa alta branco `#FFFFFF`; contorno **preto grosso**, contorno externo **amarelo elétrico**, sombra **vermelha grossa**, profundidade 3D e discreto brilho de fogo, no terço superior; split lighting teal/blue à esquerda e amber/orange à direita nos rostos e fundo; teal-orange grade, vinheta escura, leve dessaturação de cenário, lens flare, motion blur APENAS ao fundo, neblina cinematográfica, film grain; fotorealismo de pôster documental. **Nenhum split screen** (a iluminação dividida é permitida). Não incluir marca d'água nem logos não autorizados. Resoluções finais EXATAS: horizontal 1280×720; vertical 720×1280.
 
 ## Artefatos e ferramentas
 
@@ -49,16 +53,6 @@ Ler `references/visual-identity.md` antes de criar cada prompt, se esse arquivo 
 - `python ${HERMES_SKILL_DIR}/scripts/thumbnail.py render --source "background_sem_texto.png" --line1 "BRUXELAS" --line2 "EM COLÁPSO" --format 16:9 --output "final.png"` aplica texto final sem mudar a arte-base; só executar se o script existir. `--format 9:16` funciona com uma arte-base vertical independente.
 - `python ${HERMES_SKILL_DIR}/scripts/toolkit.py pack --project ".../project.json"` compacta apenas outputs, sem fotos originais de referência, somente se o script existir.
 - Para preservar contexto: salvar atualizações no `project.json` ao concluir cada etapa.
-
-## Leituras sob demanda (não carregar todas simultaneamente)
-
-- `references/editorial-and-research.md`: fontes, SEO, roteiro, perguntas, limites de linguagem e jornalismo.
-- `references/visual-identity.md`: especificações de design e prompts por formato.
-- `references/interactions.md`: fluxos guiados, comandos e gates de aprovação.
-- `references/quality-gates.md`: critérios de validação, métricas, correções e entrega.
-- `references/example.md`: exemplo compacto de conversa.
-
-Carregar cada referência sob demanda somente se o arquivo estiver presente. Se faltar, seguir as instruções disponíveis neste SKILL.md e informar que o material complementar não foi incluído; não afirmar que o consultou.
 
 ## Regras para erros e eficiência
 
