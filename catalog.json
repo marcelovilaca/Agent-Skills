@@ -22,9 +22,9 @@
       "version": "0.1.1"
     },
     "livestream-toolkit": {
-      "source_sha256": "5fdfc40a1e4af41587c6468a29ada7b54e69e9f7e757ca2c70559638cad91512",
-      "updated_at": "2026-11-05T19:30:50+00:00",
-      "version": "3.0.1"
+      "source_sha256": "79d21236695b020f5674091fe79c3f2f763631372e478314c121847b79c70239",
+      "updated_at": "2026-11-05T19:32:15+00:00",
+      "version": "3.0.2"
     },
     "local-stack-testing": {
       "source_sha256": "2c2d2cb87adad3f9d61137ceca9468b951a460ed504791b70626879e0f5b507c",
@@ -62,5 +62,5 @@
       "version": "1.0.0"
     }
   },
-  "updated_at": "2026-11-05T19:30:50+00:00"
+  "updated_at": "2026-11-05T19:32:15+00:00"
 }

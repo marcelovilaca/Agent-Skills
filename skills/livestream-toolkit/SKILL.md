@@ -5,7 +5,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_category: "content-creation"
   hermes_tags: "youtube, livestream, guest, journalism, seo, thumbnails, pt-br"
-  version: "3.0.1"
+  version: "3.0.2"
 ---
 
 # Livestream Toolkit 3.0 — produtor de lives com convidados
@@ -24,7 +24,7 @@ Ao receber `/livestream-toolkit`, `prepare uma live`, `continuar kit`, ou pedido
 
 1. **Retomar antes de começar:** se o usuário disser "continuar", procurar o `project.json` indicado ou perguntar qual projeto, exibir estado e próximos passos. Não pedir novamente informação já fornecida.
 2. **Perguntar em etapas curtas:** no primeiro contato, perguntar: **"Quantos convidados teremos e quais são os nomes?"**. Aceitar "sem convidado". Em seguida perguntar links pessoais (opcionais), tópico central, links de notícias/artigos (opcionais), e data/hora da live se necessário. Aceitar o nome do apresentador quando não estiver definido. Se o usuário oferecer muitos dados espontaneamente, registrar sem repetir perguntas. Sempre oferecer `pular`, `voltar`, `alterar`, `status`, `aprovar`, `continuar`.
-3. **Referências faciais:** pesquisar o nome de cada convidado e do apresentador em `FACIAL_REFERENCES_DIR` (diretório definido pelo usuário) **somente quando o caminho estiver configurado e acessível ao runtime**. Executar `python ${HERMES_SKILL_DIR}/scripts/toolkit.py find-images --name "NOME" --root "CAMINHO"` somente se esse script existir. Apresentar candidatos e pedir confirmação quando houver múltiplos ou similaridade incerta. Se diretório inacessível, solicitar montagem/autorização, novo caminho ou envio dos arquivos. **Jamais fingir acesso a uma unidade ou diretório de outra máquina.** A imagem do apresentador deve ser resolvida uma vez e reaproveitada.
+3. **Referências faciais:** pesquisar o nome de cada convidado e do apresentador em `FACIAL_REFERENCES_DIR` (diretório definido pelo usuário) **somente quando o caminho estiver configurado e acessível ao runtime**. Executar `python PATH_TO_HERMES_SKILL/scripts/toolkit.py find-images --name "NOME" --root "CAMINHO"` somente se esse script existir. Apresentar candidatos e pedir confirmação quando houver múltiplos ou similaridade incerta. Se diretório inacessível, solicitar montagem/autorização, novo caminho ou envio dos arquivos. **Jamais fingir acesso a uma unidade ou diretório de outra máquina.** A imagem do apresentador deve ser resolvida uma vez e reaproveitada.
 4. **Resumo de confirmação:** mostrar convidados/fotos, tema, URLs, data, tom e estrutura; pedir **uma aprovação editorial** antes de investir em produção de imagens. Não bloquear pesquisa editorial se faltarem fotos: marcar `PENDENTE_IMAGENS`.
 5. **Pesquisa e entrevista:** pesquisar fatos recentes, datas absolutas e contexto histórico. Ler conteúdo de artigos, ignorar comentários, listar URL, autor/editor, publicação, data, afirmação e grau de confirmação. Verificar ao menos uma fonte primária quando possível; assinalar "não verificado" se for hipótese. Fazer EXATAMENTE duas perguntas abertas, provocativas e longas por tema/fonte selecionada, com possíveis reperguntas opcionais, separadas do bloco principal.
 6. **SEO e roteiro:** produzir **seis títulos**, idealmente 70–90 caracteres, máximo 99, palavra-chave no início quando natural, alternar teaser informativo / sensacionalista responsável / clickbait analítico; descrição SEO de 50–100 palavras, um parágrafo; cinco hashtags (2 globais, 2 PT-BR e 1 nicho); dez tags incluindo convidado; três conceitos de thumbnail com título principal e alternativa; uma enquete de quatro respostas (até 35 caracteres cada); uma mensagem Superchat (2–3 frases); três prompts detalhados de fundo e personagem. Incluir agenda em blocos, ordem de entrada, gancho inicial, transições, CTA, comentário fixado e cortes para Shorts como anexos extras. Nunca alegar que hashtags ou tags são trending sem sinal verificável atual.
@@ -47,11 +47,11 @@ Usar o resumo abaixo como especificação visual: fonte ultra-bold condensed san
 ## Artefatos e ferramentas
 
 - Se o Hermes dispuser de ferramentas de busca, leitura de URL e geração de imagens, usá-las de verdade e registrar fontes e outputs. Caso contrário produzir pacote editorial + prompts e marcar `PENDENTE_GERAÇÃO_DE_IMAGENS`, sem alegar imagens prontas. Se um recurso complementar ou script citado não estiver instalado, não tentar inventar nem simular sua execução.
-- `python ${HERMES_SKILL_DIR}/scripts/toolkit.py wizard --output-root "CAMINHO"` oferece uma **alternativa interativa no terminal** com persistência e detecção de referências, somente se o script existir.
-- `python ${HERMES_SKILL_DIR}/scripts/toolkit.py find-images --name "NOME" --root "CAMINHO"` lista candidatos sem editar nada, somente se o script existir.
-- `python ${HERMES_SKILL_DIR}/scripts/toolkit.py validate --project ".../project.json"` audita o `kit.json` e imagens, somente se o script existir.
-- `python ${HERMES_SKILL_DIR}/scripts/thumbnail.py render --source "background_sem_texto.png" --line1 "BRUXELAS" --line2 "EM COLÁPSO" --format 16:9 --output "final.png"` aplica texto final sem mudar a arte-base; só executar se o script existir. `--format 9:16` funciona com uma arte-base vertical independente.
-- `python ${HERMES_SKILL_DIR}/scripts/toolkit.py pack --project ".../project.json"` compacta apenas outputs, sem fotos originais de referência, somente se o script existir.
+- `python PATH_TO_HERMES_SKILL/scripts/toolkit.py wizard --output-root "CAMINHO"` oferece uma **alternativa interativa no terminal** com persistência e detecção de referências, somente se o script existir.
+- `python PATH_TO_HERMES_SKILL/scripts/toolkit.py find-images --name "NOME" --root "CAMINHO"` lista candidatos sem editar nada, somente se o script existir.
+- `python PATH_TO_HERMES_SKILL/scripts/toolkit.py validate --project ".../project.json"` audita o `kit.json` e imagens, somente se o script existir.
+- `python PATH_TO_HERMES_SKILL/scripts/thumbnail.py render --source "background_sem_texto.png" --line1 "BRUXELAS" --line2 "EM COLÁPSO" --format 16:9 --output "final.png"` aplica texto final sem mudar a arte-base; só executar se o script existir. `--format 9:16` funciona com uma arte-base vertical independente.
+- `python PATH_TO_HERMES_SKILL/scripts/toolkit.py pack --project ".../project.json"` compacta apenas outputs, sem fotos originais de referência, somente se o script existir.
 - Para preservar contexto: salvar atualizações no `project.json` ao concluir cada etapa.
 
 ## Regras para erros e eficiência
