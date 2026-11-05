@@ -6,7 +6,7 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "video, dubbing, YouTube, WhisperX, Qwen3-TTS, local"
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Local Video Dubber

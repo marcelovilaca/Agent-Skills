@@ -2,65 +2,65 @@
   "schema_version": 1,
   "skills": {
     "ai-generated-content": {
-      "source_sha256": "ec32c0747584c6c28536847f405982da75787f83c04e3792b180806b40cb379d",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.0.0"
-    },
-    "docker-install-from-docs": {
-      "source_sha256": "3c5f182619e31c60fe98e19b6eddeba45a19ab29521d956f7ab4b218b123212f",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.0.0"
-    },
-    "ebook-to-audiobook-master": {
-      "source_sha256": "2337d5a5e3b011c257512300115015ffe8864cfe56e2fb50dfab7788790a971e",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "0.1.0"
-    },
-    "github-skill-versioner": {
-      "source_sha256": "bf84867ae62f83cde710e70c507654a7c2edf8c88217c3aedfd3e31b9b961372",
-      "updated_at": "2026-11-05T12:18:49+00:00",
-      "version": "0.1.1"
-    },
-    "livestream-toolkit": {
-      "source_sha256": "79d21236695b020f5674091fe79c3f2f763631372e478314c121847b79c70239",
-      "updated_at": "2026-11-05T19:32:15+00:00",
-      "version": "3.0.2"
-    },
-    "local-stack-testing": {
-      "source_sha256": "2c2d2cb87adad3f9d61137ceca9468b951a460ed504791b70626879e0f5b507c",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.0.0"
-    },
-    "local-video-dubber": {
-      "source_sha256": "49ce52e5fd3b9b1391ad7384c5734d9bf3aff46093600e669f3d72f40ae23160",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "0.1.0"
-    },
-    "pdf-to-epub-master": {
-      "source_sha256": "9b0e66a2e4ca5a5564fd0bc3604e7ab803d509764ab54437cce878b89f804652",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "0.1.0"
-    },
-    "react-vite-miniapp-setup": {
-      "source_sha256": "1b11fbabfc8ebe5c9389fc19c66d1ac7990e8164e4baf80cef55057fc86dbdba",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.1.0"
-    },
-    "skill-management": {
-      "source_sha256": "8f24789992ab97a99201b215a65a3632001a541145001f50d0d711aab29c1ebf",
-      "updated_at": "2026-11-05T12:20:15+00:00",
+      "source_sha256": "f56737272e36b9542fc03c17689ae89fe63b16696e776ec7dc549cba82139a92",
+      "updated_at": "2026-11-05T20:22:18+00:00",
       "version": "1.0.1"
     },
+    "docker-install-from-docs": {
+      "source_sha256": "ad1b3d84ea248711abdbb93490d9ad3fdbe9b384f03a23090b9aaede9fc6f4b9",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "1.0.1"
+    },
+    "ebook-to-audiobook-master": {
+      "source_sha256": "256ad08c3002a0e35941d5aa3e7e4c38bfa0b9ec5eea77bf8fe6d3bcf1864cf7",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "0.1.1"
+    },
+    "github-skill-versioner": {
+      "source_sha256": "56b3231c96438c0f296e851fe8eacfc9c7cc5a4d07f067bc90da140d6d65b58b",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "0.1.2"
+    },
+    "livestream-toolkit": {
+      "source_sha256": "3c08e93d71c6c8b0a6a91461383e8ad58a529cf058296d0619cabb7b1b5cf3ef",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "3.0.3"
+    },
+    "local-stack-testing": {
+      "source_sha256": "bfed08abb43c06398ee1afba69fdbdc23c69b8a765fbdfc5dc740a7de99f824a",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "1.0.1"
+    },
+    "local-video-dubber": {
+      "source_sha256": "a482b6071b60e9212da5abd51f3820b346c139f7cf428d1131819f501a990923",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "0.1.1"
+    },
+    "pdf-to-epub-master": {
+      "source_sha256": "7499865b4c7b000c31f86096cbdbb93aa289f6b9e10d8dc20c796ae43d0a5ca6",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "0.1.1"
+    },
+    "react-vite-miniapp-setup": {
+      "source_sha256": "ea3aac3c27432a191705b662365e0ee6dae949999237da6f52e0eeb5191f3c26",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "1.1.1"
+    },
+    "skill-management": {
+      "source_sha256": "4f9917b872b910b2a3cc8cda14c2d6442c3d1da1a5e1db96588512630503f522",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "1.0.2"
+    },
     "telegram-miniapp-suite": {
-      "source_sha256": "bb9edc819b023438e9fda718e69b803b44f8692ddf92b10ace487c63ff29a410",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.0.0"
+      "source_sha256": "998075b112ee688df007942e173c01f44a5b4df97aa7e9f867148ca9d379c56b",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "1.0.1"
     },
     "tt-rss-docker-install": {
-      "source_sha256": "696e9fa9d424b68274b21897f7c3b90921db0d125628a4d839c89da386c00bdb",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.0.0"
+      "source_sha256": "912de395496f33fa5158abdb31fcc802b0d454163fbfe7ef2d86ce0cc26e7c35",
+      "updated_at": "2026-11-05T20:22:18+00:00",
+      "version": "1.0.1"
     }
   },
-  "updated_at": "2026-11-05T19:32:15+00:00"
+  "updated_at": "2026-11-05T20:22:18+00:00"
 }

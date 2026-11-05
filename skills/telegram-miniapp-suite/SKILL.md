@@ -6,7 +6,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "react-vite-miniapp-setup"
   hermes_tags: "telegram, miniapp, grammy, fastify, monorepo, 8bit"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Telegram Mini App suite — proven build recipe

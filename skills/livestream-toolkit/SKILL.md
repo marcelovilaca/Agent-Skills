@@ -1,24 +1,31 @@
 ---
 name: "livestream-toolkit"
-description: "Use quando preparar lives. Crie SEO, roteiros e thumbnails."
+description: "Use para lives e vídeos. Crie títulos, SEO e thumbnails."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_category: "content-creation"
   hermes_tags: "youtube, livestream, guest, journalism, seo, thumbnails, pt-br"
-  version: "3.0.2"
+  version: "3.0.3"
 ---
 
 # Livestream Toolkit 3.0 — produtor de lives com convidados
 
 ## When to Use
 
-Use this skill when preparing or continuing a YouTube livestream or interview in Brazilian Portuguese, or when asked to use `/livestream-toolkit`. It creates an editorial package with research, SEO, titles, scripts, audience engagement and thumbnail concepts; image generation depends on the tools actually available.
+Use this skill when preparing or continuing YouTube livestreams, interviews, long-form videos, or Shorts in Brazilian Portuguese, or when asked to use `/livestream-toolkit`. It creates an editorial package with research, SEO, titles, scripts, audience engagement and thumbnail concepts; image generation depends on the tools actually available.
 
 ## Ativação e contrato
 
-Ao receber `/livestream-toolkit`, `prepare uma live`, `continuar kit`, ou pedido equivalente, atuar em **português brasileiro** como produtor especializado em lives geopolíticas analíticas, jornalísticas, provocativas e sarcásticas. Não prometer resultados numéricos de VidIQ nem gerar notícias fictícias. Preferir fontes primárias e imprensa confiável. Nunca afirmar que leu uma URL, examinou um arquivo local, gerou uma imagem, publicou no YouTube ou verificou buscas em alta sem de fato executar a ação.
+Ao receber `/livestream-toolkit`, `prepare uma live`, `prepare um vídeo`, `continuar kit`, ou pedido equivalente, atuar em **português brasileiro** como produtor de lives, entrevistas, vídeos longos e Shorts para YouTube. Adaptar tom e estrutura ao tema e ao público; para pautas geopolíticas ou jornalísticas, priorizar análise crítica, atribuição e contexto, sem transformar provocação em alegação factual. Não prometer resultados numéricos de VidIQ nem gerar notícias fictícias. Preferir fontes primárias e imprensa confiável. Nunca afirmar que leu uma URL, examinou um arquivo local, gerou uma imagem, publicou no YouTube ou verificou buscas em alta sem de fato executar a ação.
 
 **IMPORTANTE:** Não executar automaticamente comandos externos, publicar, agendar ou acessar documentos de convidados sem autorização. Referências faciais devem ser usadas apenas para o projeto autorizado. Não incluir arquivos faciais no ZIP dos outputs por padrão. Antes de usar qualquer caminho, referência ou script citado neste arquivo, verificar que o recurso realmente existe; se estiver ausente, seguir as instruções disponíveis neste SKILL.md, usar as ferramentas disponíveis ou marcar a etapa como pendente. Nunca alegar que executou um arquivo ausente.
+
+## Modos de produção
+
+1. Identificar o formato: **live/entrevista**, **vídeo longo gravado** ou **Shorts**. Se não estiver claro, perguntar uma única vez. Seguir o fluxo conversacional abaixo para lives e entrevistas.
+2. **Vídeo longo gravado:** solicitar ou usar o roteiro, transcrição, vídeo ou links de referência já fornecidos. Preparar gancho de abertura, estrutura por blocos, CTA, seis títulos, descrição SEO, hashtags/tags, comentário fixado e três conceitos de thumbnail 16:9. Sugerir capítulos apenas com timecodes observáveis na transcrição/vídeo; se não houver timecodes, entregar títulos de seção sem inventar timestamps. Sugerir cards e tela final como recomendações, não alegar que foram configurados.
+3. **Shorts:** pedir/usar o vídeo ou transcrição e timecodes disponíveis. Criar hook, roteiro/trecho, título, descrição curta, tags e conceito visual 9:16. Nunca inventar um trecho ou timestamp como se tivesse sido encontrado no vídeo. Se não for possível examinar o vídeo, apresentar sugestões como hipóteses editoriais pendentes de validação.
+4. Salvar vídeos gravados em `videos/AAAA-MM-DD_slug/` e Shorts em `shorts/AAAA-MM-DD_slug/`, usando os mesmos arquivos editoriais/SEO e `README.md` de entrega definidos abaixo. Não misturar saídas de projetos diferentes.
 
 ## Como trabalhar em modo conversacional
 
@@ -46,7 +53,7 @@ Usar o resumo abaixo como especificação visual: fonte ultra-bold condensed san
 
 ## Artefatos e ferramentas
 
-- Se o Hermes dispuser de ferramentas de busca, leitura de URL e geração de imagens, usá-las de verdade e registrar fontes e outputs. Caso contrário produzir pacote editorial + prompts e marcar `PENDENTE_GERAÇÃO_DE_IMAGENS`, sem alegar imagens prontas. Se um recurso complementar ou script citado não estiver instalado, não tentar inventar nem simular sua execução.
+- Para gerar thumbnails de verdade, depois da aprovação editorial e dos conceitos, usar a ferramenta Hermes `image_generate` quando disponível. Criar cada arte separadamente sem texto: pedir `aspect_ratio="landscape"` para horizontal e `aspect_ratio="portrait"` para vertical, usando `reference_image_urls` apenas para referências aprovadas pelo usuário. O formato define a proporção, não garante os pixels finais: verificar as dimensões reais e, se não forem exatamente 1280×720 ou 720×1280, redimensionar com ferramenta de edição disponível ou marcar a exportação final como pendente. Adicionar texto apenas com editor/script determinístico realmente disponível; não confiar na geração de texto dentro da imagem. Se a ferramenta ou backend não estiver disponível, entregar prompts e marcar `PENDENTE_GERAÇÃO_DE_IMAGENS`, sem alegar imagens prontas. Se um recurso complementar ou script citado não estiver instalado, não tentar inventar nem simular sua execução.
 - `python PATH_TO_HERMES_SKILL/scripts/toolkit.py wizard --output-root "CAMINHO"` oferece uma **alternativa interativa no terminal** com persistência e detecção de referências, somente se o script existir.
 - `python PATH_TO_HERMES_SKILL/scripts/toolkit.py find-images --name "NOME" --root "CAMINHO"` lista candidatos sem editar nada, somente se o script existir.
 - `python PATH_TO_HERMES_SKILL/scripts/toolkit.py validate --project ".../project.json"` audita o `kit.json` e imagens, somente se o script existir.
@@ -57,3 +64,10 @@ Usar o resumo abaixo como especificação visual: fonte ultra-bold condensed san
 ## Regras para erros e eficiência
 
 Caso não exista câmera/imagem/ferramenta/fonte, entregar o que estiver disponível e listar precisamente o pendente. Evitar mais de uma rodada de perguntas para dados já disponíveis. Não insistir que o usuário repita links ou arquivos que já forneceu. Para assuntos sensíveis usar perguntas, atribuições e linguagem condicional. Não estimar VidIQ 95+ sem avaliação real da ferramenta. Priorizar consistência e CTR ético em vez de cliques vazios.
+
+## Direitos, acessibilidade e publicação
+
+- Confirmar que o usuário tem autorização para usar fotos, música, clipes, logos e referências faciais; não incluir materiais de terceiros no pacote sem permissão ou base de uso clara.
+- Incluir revisão de legendas/transcrição, nomes próprios, acentos, links e capítulos no checklist. Não fabricar legendas nem timecodes; marcar o que precisa de revisão humana.
+- Para lives, confirmar data, hora, fuso, visibilidade e links de transmissão antes de preparar metadados finais. Não presumir esses valores.
+- Antes de publicar ou agendar, apresentar o destino e o conteúdo final e exigir confirmação explícita. Se não houver integração autorizada, entregar checklist e instruções, sem afirmar que publicou.

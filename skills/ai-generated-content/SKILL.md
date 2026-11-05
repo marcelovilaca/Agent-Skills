@@ -6,7 +6,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "grounded-citations, rss-feeds, local-stack-testing"
   hermes_tags: "ai, llm, content, digest, summary, generation, rss"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # AI-generated content

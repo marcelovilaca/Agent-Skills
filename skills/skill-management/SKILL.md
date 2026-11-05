@@ -3,7 +3,7 @@ name: "skill-management"
 description: "Use when installing or verifying Hermes skills. Confirm."
 metadata:
   author: "marcelovilaca, Hermes Agent"
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # Skill management

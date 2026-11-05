@@ -3,7 +3,7 @@ name: "docker-install-from-docs"
 description: "Docker install from docs/repo; gate; verify compose."
 metadata:
   author: "marcelovilaca, Hermes Agent"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # docker-install-from-docs

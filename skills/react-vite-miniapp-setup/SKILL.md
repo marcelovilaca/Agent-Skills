@@ -6,7 +6,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "local-stack-testing"
   hermes_tags: "react, vite, miniapp, frontend, monorepo"
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # React Vite Mini‑App Setup

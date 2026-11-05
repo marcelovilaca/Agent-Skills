@@ -6,7 +6,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "react-vite-miniapp-setup"
   hermes_tags: "local-dev, testing, integration, ports, dev-auth, hygiene"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Local stack testing

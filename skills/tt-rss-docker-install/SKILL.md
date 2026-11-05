@@ -3,7 +3,7 @@ name: "tt-rss-docker-install"
 description: "Install tt-rss with Docker."
 metadata:
   author: "marcelovilaca, Hermes Agent"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # When to Use

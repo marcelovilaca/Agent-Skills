@@ -6,7 +6,7 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "pdf, OCR, EPUB, MOBI, translation, audiobook"
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # PDF to EPUB Master
