@@ -20,10 +20,16 @@ For each host, follow its current skill discovery rules. Keep the directory name
 
 ## Automatic Hermes backup
 
-The repository root is also a Hermes plugin. After the initial repo commit, install and enable it:
+The repository root is also a Hermes plugin. Try the normal scan first:
 
 ```sh
 hermes plugins install marcelovilaca/Agent-Skills --enable
+```
+
+This repository includes skill examples and a publisher that runs Git; Hermes may flag those patterns as security findings. Review the findings and the publisher source. Only if the findings are the expected skill examples and the reviewed Git publisher, use Hermes' documented override:
+
+```sh
+hermes plugins install marcelovilaca/Agent-Skills --enable --force
 ```
 
 The `on_skill_lifecycle` hook waits briefly after a Hermes skill is created or patched, then runs `scripts/publish_skills.py`. It exports active skills whose Hermes usage registry says `created_by: agent` or `created_by: learn`; catalog-installed and bundled skills are never mirrored. The publisher converts frontmatter to the portable format, normalizes legacy underscore names to hyphenated names, preserves supporting text resources, increments patch versions on content changes, commits, pushes to `main`, and verifies the remote commit.
