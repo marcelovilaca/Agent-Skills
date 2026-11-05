@@ -1,0 +1,5 @@
+name: agent-skills-publisher
+version: "0.1.0"
+description: Publish active Hermes-authored portable skills to the Agent-Skills GitHub repository.
+provides_hooks:
+  - on_skill_lifecycle
