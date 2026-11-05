@@ -232,6 +232,8 @@ def _included_files(source_dir: Path) -> list[Path]:
         result.append(path)
     if not any(path.name == "SKILL.md" and path.parent == source_dir for path in result):
         raise ValueError(f"{source_dir}: missing root SKILL.md")
+    if not any(path.name == "README.md" and path.parent == source_dir for path in result):
+        raise ValueError(f"{source_dir}: missing root README.md technical and how-to guide")
     return result
 
 

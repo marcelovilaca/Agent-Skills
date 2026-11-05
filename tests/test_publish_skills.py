@@ -88,6 +88,10 @@ Keep this instruction.
             source_dir.mkdir()
             source = "---\nname: skill\ndescription: A skill.\nversion: 0.1.0\n---\nBody\n"
             (source_dir / "SKILL.md").write_text(source, encoding="utf-8")
+            (source_dir / "README.md").write_text(
+                "# Skill\n\n## How to Use\nUse it.\n\n## Technical Details\nDetails.\n",
+                encoding="utf-8",
+            )
             first_files, first_entry = prepare_skill(source_dir, "skill", None, Path(directory))
             changed_source = source.replace("Body", "Changed body")
             (source_dir / "SKILL.md").write_text(changed_source, encoding="utf-8")
@@ -97,6 +101,18 @@ Keep this instruction.
             self.assertEqual(second_entry["version"], "0.1.1")
             self.assertEqual(third_entry["version"], "0.1.1")
             self.assertEqual(second_files["SKILL.md"], third_files["SKILL.md"])
+            self.assertIn("README.md", third_files)
+
+    def test_prepare_skill_requires_a_readme_guide(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source_dir = Path(directory) / "skill"
+            source_dir.mkdir()
+            (source_dir / "SKILL.md").write_text(
+                "---\nname: skill\ndescription: A skill.\n---\nBody\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "README.md"):
+                prepare_skill(source_dir, "skill", None, Path(directory))
 
 
 if __name__ == "__main__":

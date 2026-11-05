@@ -6,7 +6,7 @@ Portable agent skills authored with Hermes Agent, backed up and versioned in a p
 
 ## Portable format
 
-Each skill lives in `skills/<name>/SKILL.md` and follows the open [Agent Skills specification](https://agentskills.io/specification): YAML frontmatter begins with `name` and `description`; optional `license`, `compatibility`, and string-valued `metadata` follow. Supporting files live beside `SKILL.md` in `scripts/`, `references/`, or `assets/`.
+Each skill lives in `skills/<name>/` and includes `SKILL.md` plus a `README.md` technical and how-to guide. `SKILL.md` follows the open [Agent Skills specification](https://agentskills.io/specification): YAML frontmatter begins with `name` and `description`; optional `license`, `compatibility`, and string-valued `metadata` follow. Supporting files live beside these documents in `scripts/`, `references/`, or `assets/`.
 
 This shared format is supported by Hermes Agent, OpenAI Codex, Claude Code, OpenClaw, and Pi. Import compatibility does not guarantee that a host implements every tool or command named by a skill; host-specific requirements are declared in `compatibility` and in the instructions.
 
@@ -32,7 +32,7 @@ This repository includes skill examples and a publisher that runs Git; Hermes ma
 hermes plugins install marcelovilaca/Agent-Skills --enable --force
 ```
 
-The `on_skill_lifecycle` hook waits briefly after a Hermes skill is created or patched, then runs `scripts/publish_skills.py`. It exports active skills whose Hermes usage registry says `created_by: agent` or `created_by: learn`; catalog-installed and bundled skills are never mirrored. The publisher converts frontmatter to the portable format, normalizes legacy underscore names to hyphenated names, preserves supporting text resources, increments patch versions on content changes, commits, pushes to `main`, and verifies the remote commit.
+The `on_skill_lifecycle` hook waits briefly after a Hermes skill is created or patched, then runs `scripts/publish_skills.py`. It exports active skills whose Hermes usage registry says `created_by: agent` or `created_by: learn`; catalog-installed and bundled skills are never mirrored. Before publishing, every source skill must have a technically accurate `README.md` with `How to Use` and `Technical Details` sections. The publisher copies it with `SKILL.md`, converts frontmatter to the portable format, normalizes legacy underscore names to hyphenated names, preserves supporting text resources, increments patch versions on content changes, commits, pushes to `main`, and verifies the remote commit.
 
 The publisher fails closed on credential patterns, absolute local paths, unscannable binary resources, invalid frontmatter, remote divergence, and uncommitted edits outside its managed paths. Known personal roots are replaced with generic placeholders before scanning. Fix the source and rerun; do not bypass the checks.
 
@@ -50,6 +50,7 @@ Automatic-sync logs are written locally to `<HERMES_HOME>/logs/agent-skills-publ
 - Use the standard Agent Skills fields only at the top level; place nonstandard author/version details in string-valued `metadata`.
 - Keep names lowercase and hyphen-separated, matching the directory name. Keep descriptions clear and within the 1,024-character standard limit.
 - Declare host, OS, network, or command requirements. Prefer portable instructions and relative resource paths.
+- Add a per-skill `README.md` with technical details and a how-to guide; keep it alongside `SKILL.md` and update it whenever behavior or requirements change.
 - Do not include secrets, personal data, project-specific private material, or absolute machine paths.
 - Preserve any per-skill license stated in its source. No repository-wide license is implied unless one is added explicitly.
 

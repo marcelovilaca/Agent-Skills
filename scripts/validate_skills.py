@@ -36,6 +36,16 @@ def validate(root: Path = ROOT) -> list[str]:
             extra = set(metadata) - ALLOWED_TOP_LEVEL
             if extra:
                 raise ValueError("non-standard top-level fields: " + ", ".join(sorted(extra)))
+            guide_file = skill_file.parent / "README.md"
+            if not guide_file.is_file():
+                raise ValueError("missing README.md technical and how-to guide")
+            guide_text = guide_file.read_text(encoding="utf-8")
+            if not re.search(r"(?im)^##\s+How to Use\s*$", guide_text):
+                raise ValueError("README.md must include a '## How to Use' section")
+            if not re.search(r"(?im)^##\s+Technical Details\s*$", guide_text):
+                raise ValueError("README.md must include a '## Technical Details' section")
+            if "SKILL.md" not in guide_text:
+                raise ValueError("README.md must link or refer to SKILL.md")
             compatibility = metadata.get("compatibility")
             if compatibility is not None and (not isinstance(compatibility, str) or not 1 <= len(compatibility) <= 500):
                 raise ValueError("compatibility must be a string of 1–500 characters")
