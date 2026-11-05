@@ -3,7 +3,7 @@ name: "skill-management"
 description: "Use when installing or verifying Hermes skills. Confirm."
 metadata:
   author: "marcelovilaca, Hermes Agent"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Skill management
@@ -24,6 +24,7 @@ Use this when the task is to install, update, inspect, or verify Hermes skills.
    - Distinguish a failed install from a setup/environment error; do not present an unsuccessful alternate path as a working installation.
 4. Verify the result using the matching inventory (`hermes skills list` or `hermes plugins list`). If both artifacts were intended, verify both. If the name is ambiguous or duplicated, inspect the full identifier instead of the bare name.
 5. Treat the active profile as the install target. Installed artifacts become available to new sessions in that profile.
+6. After substantive skill work, review the session for a durable procedure, user preference, or pitfall and update the relevant existing class-level skill in place; check its references first to avoid duplication. Aim to capture at least one genuine improvement in most sessions. Say “Nothing to save” only after an actual review finds no reusable lesson; do not create filler skills or incident notes.
 
 ## Pitfalls
 

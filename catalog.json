@@ -42,9 +42,9 @@
       "version": "1.1.0"
     },
     "skill-management": {
-      "source_sha256": "5ec5daa33fcf7c4ff7b07822ccbdf79d3c2390e37381f403bcf0a858e4f3e2fb",
-      "updated_at": "2026-11-05T12:08:14+00:00",
-      "version": "1.0.0"
+      "source_sha256": "8f24789992ab97a99201b215a65a3632001a541145001f50d0d711aab29c1ebf",
+      "updated_at": "2026-11-05T12:20:15+00:00",
+      "version": "1.0.1"
     },
     "telegram-miniapp-suite": {
       "source_sha256": "bb9edc819b023438e9fda718e69b803b44f8692ddf92b10ace487c63ff29a410",
@@ -57,5 +57,5 @@
       "version": "1.0.0"
     }
   },
-  "updated_at": "2026-11-05T12:18:49+00:00"
+  "updated_at": "2026-11-05T12:20:15+00:00"
 }
