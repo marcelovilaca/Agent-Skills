@@ -6,12 +6,12 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "video, dubbing, YouTube, WhisperX, Qwen3-TTS, local"
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # Local Video Dubber
 
-Run the local Python pipeline to transcribe and diarize a YouTube video, translate its speech, synthesize dubbed speech, and produce synchronized MP3s. Only run on media the user has rights to use and voices they are authorized to clone.
+Run the local Python pipeline to transcribe and diarize a YouTube video, translate its speech, synthesize dubbed speech, and produce synchronized MP3s. 
 
 ## When to Use
 
