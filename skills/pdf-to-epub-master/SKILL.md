@@ -6,7 +6,7 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "pdf, OCR, EPUB, MOBI, translation, audiobook"
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # PDF to EPUB Master
@@ -17,12 +17,14 @@ Turn a user-provided PDF into clean Brazilian Portuguese Markdown, an EPUB, and 
 
 - The user wants a PDF cleaned, translated to Brazilian Portuguese, and exported as EPUB/MOBI.
 - The user needs non-narrative material isolated for later audiobook generation.
+- The user supplies an existing plain-text book and asks to format it for a later audiobook; use the text-source fast path without OCR.
 - Don't use for editing an existing EPUB only, or for OCR/transcription of images unrelated to a book.
 
 ## Inputs and Defaults
 
 - Required for the PDF route: `pdf_file_path`.
 - **Existing-Markdown fast path:** If the user supplies an existing Markdown note and explicitly skips PDF-to-Markdown conversion, treat that note as the source. Resolve and verify its path, skip PDF inspection/extraction/OCR, and record that no PDF conversion occurred. Before in-place edits, preserve a backup; keep the original book's front/back matter in the edited note unless the user asks for a narration-only edition. Do not infer or fabricate missing text or bibliographic facts.
+- **Plain-text fast path:** If the user supplies a `.txt` book and explicitly asks to format it or skip OCR, use that exact file as the source; do not search for or substitute a neighboring PDF/ZIP. Preserve the original file unchanged and create a derived Markdown file plus `metadata_and_exclusions.json`. Skip PDF inspection, OCR, and translation when the text is already in the target language; record these skips and the source SHA-256. Use source line ranges, not invented page numbers. Resolve title/author from the supplied filename and text; ask only if they remain uncertain.
 - `target_language`: Brazilian Portuguese (`pt-BR`); translate the complete narrative when the source is another language.
 - Determine author/title from the PDF metadata or title page. If either remains uncertain, ask before creating the final directory. Do not invent bibliographic facts.
 - Output root: `<AUDIOBOOKS_ROOT>\<Author Name>\<Book Title>\`. Make path components Windows-safe (replace invalid path characters) and report any substitutions.
@@ -30,11 +32,11 @@ Turn a user-provided PDF into clean Brazilian Portuguese Markdown, an EPUB, and 
 
 ## Prerequisites
 
-Use `terminal` to inspect the source file and discover installed tools before processing: check for PyMuPDF (`fitz`), a layout-aware OCR option (Marker or Surya; for scanned PDFs, an available OCR pipeline such as OCRmyPDF/Tesseract), Pandoc or another EPUB writer, and Calibre's `ebook-convert` for MOBI. Do not assume a command or package is installed. Prefer local tools; request approval before installing software or sending the document to a cloud service. If no usable tool exists, stop at that stage and report the exact blocker rather than fabricating output.
+Use `terminal` to inspect the source file and discover installed tools before processing. For PDFs, check PyMuPDF (`fitz`), layout-aware OCR (Marker/Surya or OCRmyPDF/Tesseract for scans), an EPUB writer, and Calibre `ebook-convert` for MOBI. For an explicitly selected `.txt` or `.md` fast path, skip OCR-tool requirements and check only the EPUB/MOBI tools needed for requested outputs. Do not assume a command or package is installed. Prefer local tools; request approval before installing software or sending the document to a cloud service. If no usable tool exists for a requested output, report the exact blocker rather than fabricating it.
 
 ## Procedure
 
-1. **Inspect and extract.** Confirm the input exists and is a readable PDF. Use a layout-aware extractor and retain page number, block text, and bounding boxes in working data. With a usable text layer, PyMuPDF blocks are acceptable; for scanned/image-only pages, OCR with a layout-aware tool. Check representative early, middle, and late pages for missing text, reading-order errors, columns, tables, and OCR corruption. Re-run OCR or correct extraction when needed; do not silently drop unreadable pages.
+1. **Route and inspect the source.** Confirm the supplied path exists and is readable. For PDF input, use a layout-aware extractor, retain page number/block text/bounding boxes, and inspect representative early, middle, and late pages; use layout-aware OCR for scans and do not silently drop unreadable pages. For the explicit plain-text fast path, read the supplied `.txt` directly, preserve its encoding/content, record its hash, and skip PDF extraction and OCR. Do not pick a different source file merely because a similarly named archive or PDF is nearby.
 
 2. **Remove recurring artifacts conservatively.** Normalize whitespace and digit runs when comparing candidate blocks. Treat a short block as a removable header/footer only when its top/bottom position and repeated wording strongly indicate a running artifact (for example, it appears on at least three pages and on at least 25% of pages). Detect page-number-varying watermarks similarly by position and normalized text. Do not remove a passage merely because it repeats; preserve uncertain material and log it for review. Record all removed recurring strings and affected page numbers in the JSON.
 
@@ -52,7 +54,7 @@ Use `terminal` to inspect the source file and discover installed tools before pr
    ```
    Add citation notes and footnotes that remain in the narrative to `inline_exclusions` and wrap their corresponding locations in Markdown using `<!-- EXCLUDE_FROM_AUDIO: ... -->`. Keep the marker concise and ensure the full excluded note is stored in JSON. Do not put ordinary narrative sentences inside exclusion markers.
 
-5. **Format Markdown.** Write `Source\<Title>.md` as UTF-8. Use `# Chapter 1: Title` for chapters and `##` for subchapters; preserve source numbering and titles rather than inventing them. Merge OCR line wraps into continuous paragraphs, but retain paragraph boundaries, intentional verse, lists, and dialogue. Repair punctuation spacing and obvious OCR errors without changing meaning. Use emphasis/italics only where supported by the source, and blockquotes for letters or clearly distinct inserted voices. Put `---` between major narrative sections. Ensure no isolated page numbers, running headers, or excluded front/back matter remain in the narration. Preserve citations/footnote locations as audio-exclusion comments.
+5. **Format Markdown.** Write `Source\<Title>.md` as UTF-8. Use `# Chapter 1: Title` for chapters and `##` for subchapters; preserve source numbering and titles rather than inventing them. For wrapped TXT/PDF text, join hard line wraps into readable paragraphs; blank lines alone are not proof of a paragraph boundary when a sentence or hyphenated word visibly continues. Preserve intentional verse, lists, dialogue, and real paragraph breaks. Correct only unambiguous structural/OCR substitutions (for example, a damaged chapter numeral uniquely resolved by the complete chapter sequence), and log the original and replacement in JSON; do not guess at prose corrections. When this skill's verified Markdown/JSON is explicitly requested as audiobook input, hand its book directory to `ebook_to_audiobook_master`; do not start TTS until that skill's book-wide preflight passes. Use emphasis/italics only where supported by the source, and blockquotes for letters or clearly distinct inserted voices. Put `---` between major narrative sections. Ensure no isolated page numbers, running headers, or excluded front/back matter remain in the narration. Preserve citations/footnote locations as audio-exclusion comments.
 
 6. **Build the EPUB.** Create `Ebooks\<Title>.epub` from the finished Markdown using an available EPUB generator (prefer Pandoc/EPUB 3 if present). Set title, author, and language explicitly (`pt-BR`); include a navigable chapter TOC, sensible chapter breaks, and readable typography. Do not rely on converter defaults for metadata. If Pandoc/EbookLib is unavailable but a reflowable EPUB is still required, a small Python-stdlib EPUB 3 ZIP writer is acceptable only when the package, navigation, and XHTML parse successfully, the ZIP integrity test passes, metadata is verified, and every TOC target resolves. If metadata cannot be set or a chapter is missing, correct the build before proceeding.
 

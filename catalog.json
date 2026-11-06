@@ -12,9 +12,9 @@
       "version": "1.0.1"
     },
     "ebook-to-audiobook-master": {
-      "source_sha256": "256ad08c3002a0e35941d5aa3e7e4c38bfa0b9ec5eea77bf8fe6d3bcf1864cf7",
-      "updated_at": "2026-11-05T20:22:18+00:00",
-      "version": "0.1.1"
+      "source_sha256": "4693329371c1ee4dc913637146c46c6b0837e3c91c4ddb7819c7c8030f2bfc15",
+      "updated_at": "2026-11-06T03:29:34+00:00",
+      "version": "0.1.2"
     },
     "github-skill-versioner": {
       "source_sha256": "80c4085df81829af0b8cd754b3f09089b938ae7812788a4a0a6c0488bbeef4d7",
@@ -37,9 +37,9 @@
       "version": "0.1.1"
     },
     "pdf-to-epub-master": {
-      "source_sha256": "7499865b4c7b000c31f86096cbdbb93aa289f6b9e10d8dc20c796ae43d0a5ca6",
-      "updated_at": "2026-11-05T20:22:18+00:00",
-      "version": "0.1.1"
+      "source_sha256": "7aef8a76eeed352ec954104355da5659514332041d06bddd299ad0a9824d0f49",
+      "updated_at": "2026-11-06T03:29:34+00:00",
+      "version": "0.1.2"
     },
     "react-vite-miniapp-setup": {
       "source_sha256": "ea3aac3c27432a191705b662365e0ee6dae949999237da6f52e0eeb5191f3c26",
@@ -62,5 +62,5 @@
       "version": "1.0.1"
     }
   },
-  "updated_at": "2026-11-05T20:26:49+00:00"
+  "updated_at": "2026-11-06T03:29:34+00:00"
 }
