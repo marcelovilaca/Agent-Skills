@@ -7,7 +7,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "pdf-to-epub-master"
   hermes_tags: "audiobook, TTS, Portuguese, FFmpeg, Markdown, audio"
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Ebook to Audiobook Master
@@ -23,13 +23,14 @@ Produce a resumable, chapter-by-chapter Portuguese audiobook from the cleaned Ma
 ## Inputs and Defaults
 
 - Required: `book_directory` (normally `<AUDIOBOOKS_ROOT>\<Author>\<Title>\`).
-- Use only the Markdown and matching `Source\metadata_and_exclusions.json` in that book directory. - Use only the Markdown and matching `Source\\metadata_and_exclusions.json` in that book directory. If either is missing or ambiguous, stop and ask; do not guess which book file to narrate. If the user supplied a PDF or plain-text source and explicitly asked to prepare it before audiobook creation, first run `pdf_to_epub_master` on that exact source, then continue here only after its Markdown and exclusion JSON are verified; never narrate the raw source as though it had passed preparation.
+- Use exactly one prepared Markdown source in `Source\` and its matching `Source\metadata_and_exclusions.json`. If either is missing or ambiguous, stop and ask; do not guess which book file to narrate. If the user supplies a PDF or plain-text source and explicitly asks to prepare it, run `pdf_to_epub_master` on that exact source, verify the resulting Markdown and exclusion JSON, and use only those prepared files; never narrate the raw input.
 - Final files go to `Audio\` under the book directory.
 - Hard limit: at most 5,000 characters per submitted TTS chunk, or the engine's lower limit if stricter.
 - Speak each chapter title once at the beginning of its audio, unless the user requests otherwise.
 - Default TTS: OpenRouter endpoint `https://openrouter.ai/api/v1/audio/speech`; model exactly `heygen/heygen-voice-1-turbo:free`; voice exactly `gareth`; final audiobook output is MP3. OpenRouter's live response for this exact free model rejected `response_format: "mp3"` with HTTP 400 (`HeyGen Voice only supports response_format "pcm"`), so request PCM and convert it to MP3 with FFmpeg; never substitute the paid base model.
 - Send one request per chunk with JSON shaped like `{"model":"heygen/heygen-voice-1-turbo:free","input":"<filtered chunk text>","voice":"gareth","response_format":"pcm"}`. Replace the placeholder with the actual non-empty chunk text. Save the raw PCM using its true extension and transcode to MP3; never label PCM bytes as `.mp3`.
 - Use exactly `heygen/heygen-voice-1-turbo:free`. The reference documentation describes the standard paid base model; it does not override this requested free model. Never remove `:free` or fall back to `heygen/heygen-voice-1-turbo`. If OpenRouter rejects the free model ID or reports it unavailable, stop and report that blocker.
+- For Brazilian Portuguese, require prepared source metadata language `pt-BR` and submit cleaned Portuguese text. The documented OpenRouter HeyGen request schema has no `language` field: do not add an undocumented parameter or switch models/voices to simulate one. Rely on provider language detection from the text; record requested/input language and `Content-Language` when returned, reject a returned non-Portuguese language, and disclose when regional output was not independently confirmed.
 
 ## Prerequisites
 
@@ -63,8 +64,8 @@ Use `terminal` to verify the input files and discover FFmpeg/ffprobe before gene
   2. `Re-create this chapter`.
   3. `Continue through all remaining chapters without asking again`.
 - Choice 1 starts only the next chapter; after its verified preview and path are delivered, ask the same question again. Choice 2 preserves the current valid MP3 under a timestamped backup name, rebuilds only that chapter with the same source/model/voice/settings, re-verifies the MP3 and preview, delivers both again, and asks again. Never silently overwrite the prior result.
-- Choice 3 enables auto-continue for the rest of this book: set `auto_continue: true` in a book-level progress manifest and merge each chapter's status, output, preview, and duration into it, preserving prior chapter records (including verified existing tracks) rather than rebuilding the manifest. Generate strictly one chapter at a time and still deliver the path and playable preview after every verified chapter. Do not ask for another choice until all remaining chapters are complete. Provide a final summary after the last chapter.
-- Ask after the final chapter too, but explain the choices' effect: `Continue to the next chapter` and `Continue through all remaining chapters without asking again` both simply finish/report the book because no chapters remain; `Re-create this chapter` rebuilds the last chapter.
+- Choice 3 enables auto-continue for the rest of this book: set `auto_continue: true` in a book-level progress manifest and merge each chapter's status, output, preview, and duration into it, preserving prior chapter records (including verified existing tracks) rather than rebuilding the manifest. Generate strictly one chapter at a time and still deliver the path and playable preview after every verified chapter. Do not ask for another choice during auto-continue or after the final remaining chapter; provide the final summary.
+- When auto-continue is false, ask after the final chapter too and explain that continuing only finishes the book while recreating rebuilds the final chapter. When auto-continue is true, do not reopen the choice prompt.
 - If the `clarify` tool is unavailable, present the same three choices in chat and pause. If the user choice is unanswered, cancelled, or times out, leave the verified current track complete, do not queue or generate another track, and pause; state the available choices in chat and wait for the user's next message rather than automatically re-opening the prompt. Never assume the user wants to continue. If generation, stitching, verification, or preview creation fails, report the blocker and preserve resumable files; do not present an unverified preview or advance to another chapter.
 
 ## Output Layout
