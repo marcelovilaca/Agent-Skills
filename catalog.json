@@ -32,9 +32,9 @@
       "version": "1.0.1"
     },
     "local-video-dubber": {
-      "source_sha256": "17010e1cca0cc8d81c81ff70ffa684232b0647663826b9293aff3fa9105c243f",
-      "updated_at": "2026-11-06T15:04:56+00:00",
-      "version": "0.1.3"
+      "source_sha256": "17f4fac5e68b6c9843cfa38db793a6de8b85575b68bf3568c8374c985174b2e1",
+      "updated_at": "2026-11-06T16:36:54+00:00",
+      "version": "0.1.4"
     },
     "pdf-to-epub-master": {
       "source_sha256": "7aef8a76eeed352ec954104355da5659514332041d06bddd299ad0a9824d0f49",
@@ -62,5 +62,5 @@
       "version": "1.0.1"
     }
   },
-  "updated_at": "2026-11-06T15:04:56+00:00"
+  "updated_at": "2026-11-06T16:36:54+00:00"
 }

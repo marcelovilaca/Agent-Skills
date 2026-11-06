@@ -6,7 +6,7 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "video, dubbing, YouTube, WhisperX, Qwen3-TTS, local"
-  version: "0.1.3"
+  version: "0.1.4"
 ---
 
 # Local Video Dubber
@@ -33,6 +33,13 @@ Run the local Python pipeline to transcribe and diarize a YouTube video, transla
 4. Check `http://127.0.0.1:1234/api/v1/models` with a short timeout. If it returns 401, confirm `LM_API_TOKEN` is available to the process; never request or output the token in chat. Then smoke-test `/api/v1/chat` with one short translation using the selected local text model; a successful `/models` response proves connectivity, not inference. Prefer an explicitly tested `--lmstudio-model` over `auto` if translation is slow or times out.
 5. Run through `terminal` with the URL quoted, `--all-target-languages` when targets were not specified, and `--lmstudio-url` only if the configured endpoint differs. Use a long timeout appropriate for video duration and model downloads.
 6. Report the resulting MP3 paths only after verifying each returned path exists and has nonzero size. Outputs must be `<TRANSLATIONS_ROOT>\<video title>\<video title>_(<language>).mp3`.
+
+## Runtime Planning and Resumption
+
+- On Windows, environment variables set at user scope are inherited only by newly started processes. If `HF_TOKEN` or `LM_API_TOKEN` exists in the user environment but not the active Hermes process, fully restart Hermes; verify presence without printing values and never paste tokens into source code or command arguments.
+- A successful `/api/v1/models` check does not prove translation inference works. Before a long run, smoke-test `/api/v1/chat` with the explicitly selected model.
+- The current synthesis loop generates one segment at a time and exports the final MP3 only after all segments finish. Before synthesizing a long recording, benchmark several representative lines, estimate total runtime, and ask the user before proceeding when the estimate exceeds 30 minutes.
+- An interrupted run can leave `source.wav`, `transcript.json`, `translated_segments.json`, reference WAVs, and partial `line_*.wav` files without a final MP3. Inspect and preserve these artifacts before retrying; the current CLI does not reliably resume partial synthesis, so do not blindly rerun from the beginning or delete the cache.
 
 ## Safety and Failure Handling
 
