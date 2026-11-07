@@ -6,7 +6,7 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "video, dubbing, YouTube, WhisperX, Qwen3-TTS, local"
-  version: "0.1.4"
+  version: "0.1.5"
 ---
 
 # Local Video Dubber
@@ -15,7 +15,8 @@ Run the local Python pipeline to transcribe and diarize a YouTube video, transla
 
 ## When to Use
 
-- Use when the user invokes this skill or gives a YouTube URL to dub.
+- Use when the user invokes `/local-video-dubber`, explicitly requests the local WhisperX/LM Studio/Qwen3-TTS workflow, or asks for generic video dubbing without specifying a cloud backend.
+- Do not use when the user explicitly requests OpenRouter or ElevenLabs cloud dubbing; use `/openrouter-video-dubber` instead.
 - Do not run when the user only asks about the script, dependencies, or how dubbing works.
 
 ## Prerequisites

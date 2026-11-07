@@ -12,14 +12,19 @@
       "version": "1.0.1"
     },
     "ebook-to-audiobook-master": {
-      "source_sha256": "be95c2fd6ce984c3e9323dc57f6a8994532c6bf6aa0d45ac9a8eacb3bb5577db",
-      "updated_at": "2026-11-07T11:14:02+00:00",
-      "version": "0.1.6"
+      "source_sha256": "e10d5d7239250bb40149d466f852e724c901ab418502ae1ea2c20a271d1b5461",
+      "updated_at": "2026-11-07T17:38:31+00:00",
+      "version": "0.2.0"
     },
     "github-skill-versioner": {
       "source_sha256": "80c4085df81829af0b8cd754b3f09089b938ae7812788a4a0a6c0488bbeef4d7",
       "updated_at": "2026-11-05T20:26:49+00:00",
       "version": "0.1.3"
+    },
+    "line-preserving-localization": {
+      "source_sha256": "c11e9b21647b0ec8aad493a2cc5cc6122f2f0ed454aa98c4647c58a215a6e686",
+      "updated_at": "2026-11-07T17:38:31+00:00",
+      "version": "1.0.0"
     },
     "livestream-toolkit": {
       "source_sha256": "3c08e93d71c6c8b0a6a91461383e8ad58a529cf058296d0619cabb7b1b5cf3ef",
@@ -32,14 +37,19 @@
       "version": "1.0.1"
     },
     "local-video-dubber": {
-      "source_sha256": "17f4fac5e68b6c9843cfa38db793a6de8b85575b68bf3568c8374c985174b2e1",
-      "updated_at": "2026-11-06T16:36:54+00:00",
-      "version": "0.1.4"
+      "source_sha256": "0636dc91a51de0b2368367c20b29d5dbdb4fb42cc40abf7654f7ca2549fb8e21",
+      "updated_at": "2026-11-07T17:38:31+00:00",
+      "version": "0.1.5"
+    },
+    "openrouter-video-dubber": {
+      "source_sha256": "e341a5e9fe6b9ac44a16bc4a43bec8fa21a18059008aea6085fb051b794f3f03",
+      "updated_at": "2026-11-07T17:38:31+00:00",
+      "version": "0.1.0"
     },
     "pdf-to-epub-master": {
-      "source_sha256": "f5b35643ba6998cb67beed0725e5c9a9fbb3273b74b2858707fec06e49951565",
-      "updated_at": "2026-11-07T09:49:06+00:00",
-      "version": "0.1.3"
+      "source_sha256": "3374b5f92ab32991e7945c48ec613f4a582523d263f5031d10b15ece54228fce",
+      "updated_at": "2026-11-07T17:38:31+00:00",
+      "version": "0.1.4"
     },
     "react-vite-miniapp-setup": {
       "source_sha256": "ea3aac3c27432a191705b662365e0ee6dae949999237da6f52e0eeb5191f3c26",
@@ -60,7 +70,12 @@
       "source_sha256": "912de395496f33fa5158abdb31fcc802b0d454163fbfe7ef2d86ce0cc26e7c35",
       "updated_at": "2026-11-05T20:22:18+00:00",
       "version": "1.0.1"
+    },
+    "x-daily-digest": {
+      "source_sha256": "b3119721c1854dcc7d89fa0bb7891ac71d6033e64f4d4eab39363d82ec04ec80",
+      "updated_at": "2026-11-07T17:38:31+00:00",
+      "version": "1.0.0"
     }
   },
-  "updated_at": "2026-11-07T11:14:02+00:00"
+  "updated_at": "2026-11-07T17:38:31+00:00"
 }

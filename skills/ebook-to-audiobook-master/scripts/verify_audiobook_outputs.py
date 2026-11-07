@@ -98,8 +98,8 @@ def main() -> int:
         book = re.fullmatch(r"livro\s+(primeiro|segundo|terceiro|quarto|cinco|quinto|sexto|setimo)", normalized)
         if book:
             expected.add(book_ordinals[book.group(1)])
-    if not expected:
-        errors.append("No numbered Chapter, Proémio, or recognized Livro headings found in the source.")
+    if not expected and not progress.get("track_catalog"):
+        errors.append("No numbered Chapter, Proémio, or recognized Livro headings found in the source or progress track catalog.")
     epilogue = re.search(r"(?im)^#\s*(Epilogue|Epílogo|Coda)\b[^\n]*$", source_text)
     if epilogue:
         labels = " ".join(str(section.get(key, "")) for section in metadata.get("excluded_sections", []) for key in ("type", "title", "heading", "section", "name")).casefold()
@@ -109,6 +109,34 @@ def main() -> int:
         if not explicitly_excluded:
             expected.add("epilogue")
 
+    catalog = progress.get("track_catalog", [])
+    if catalog:
+        catalog_ids = []
+        for position, entry in enumerate(catalog, 1):
+            track_id = entry.get("track_id")
+            if track_id is None:
+                track_id = entry.get("source_chapter_number")
+            if track_id is None:
+                track_id = entry.get("track_sequence", position)
+            catalog_ids.append(str(track_id))
+        if len(catalog_ids) != len(set(catalog_ids)):
+            errors.append("Progress track_catalog contains duplicate track IDs.")
+        expected = set(catalog_ids)
+        if all(entry.get("source_chapter_number") is None for entry in catalog):
+            source_h2_titles = [match.group(1).strip() for match in re.finditer(r"(?m)^##\s+([^\n]+?)\s*$", source_text)]
+            catalog_titles = [str(entry.get("title", "")) for entry in catalog]
+            if catalog_titles != source_h2_titles:
+                errors.append("Section track_catalog titles/order do not exactly match the Markdown H2 headings.")
+        previous_end = None
+        for entry in catalog:
+            source_range = entry.get("source_line_range")
+            if source_range is not None:
+                if not isinstance(source_range, list) or len(source_range) != 2 or int(source_range[0]) > int(source_range[1]):
+                    errors.append(f"Invalid source_line_range in track catalog entry {entry.get('track_id')}.")
+                elif previous_end is not None and int(source_range[0]) <= previous_end:
+                    errors.append("track_catalog source line ranges overlap or are out of order.")
+                else:
+                    previous_end = int(source_range[1])
     chapters = progress.get("chapters", {})
     sort_track = lambda item: (0 if item == "proemio" else 2 if item == "epilogue" else 1, int(item) if item.isdigit() else 0)
     missing_ids = sorted(expected - set(chapters), key=sort_track)
@@ -175,19 +203,58 @@ def main() -> int:
                     warnings.append(f"Track {track_id}: response format is absent from the manifest.")
                 removed = manifest.get("exclusion_markers_removed")
                 mapped = manifest.get("inline_exclusion_records_for_chapter")
-                section_name = "Epílogo" if track_id == "epilogue" else "Proémio" if track_id == "proemio" else f"Chapter {track_id}"
-                metadata_inline_count = sum(entry.get("section") == section_name for entry in metadata.get("inline_exclusions", []))
-                if mapped is not None and mapped != metadata_inline_count:
-                    errors.append(f"Track {track_id}: manifest inline-exclusion count ({mapped}) differs from metadata ({metadata_inline_count}).")
-                if removed is not None and removed != metadata_inline_count:
-                    errors.append(f"Track {track_id}: removed exclusion-marker count ({removed}) differs from metadata ({metadata_inline_count}).")
+                audit = manifest.get("exclusion_audit", {})
+                marker_records = audit.get("marker_ranges", [])
+                if marker_records:
+                    if removed is not None and removed != len(marker_records):
+                        errors.append(f"Track {track_id}: removed marker count ({removed}) differs from its audited marker ranges ({len(marker_records)}).")
+                    if mapped is not None and mapped != len(marker_records):
+                        errors.append(f"Track {track_id}: mapped exclusion count ({mapped}) differs from its audited marker ranges ({len(marker_records)}).")
+                    source_range = manifest.get("source_line_range")
+                    inline_records = metadata.get("inline_exclusions", [])
+                    layout_records = metadata.get("unreadable_or_non_narrative_blocks", [])
+                    matched_count = 0
+                    for marker in marker_records:
+                        marker_range = marker.get("source_line_range")
+                        marker_type = marker.get("type")
+                        if not isinstance(marker_range, list) or len(marker_range) != 2:
+                            errors.append(f"Track {track_id}: malformed exclusion marker range {marker_range!r}.")
+                            continue
+                        candidates = inline_records if marker_type in {"footnote", "orphaned_numeric_marker"} else layout_records
+                        exact = any(item.get("source_line_range") == marker_range for item in candidates)
+                        if not exact:
+                            errors.append(f"Track {track_id}: marker {marker_type!r} at {marker_range} has no exact JSON record.")
+                            continue
+                        matched_count += 1
+                        if source_range and (int(marker_range[0]) < int(source_range[0]) or int(marker_range[1]) > int(source_range[1])):
+                            errors.append(f"Track {track_id}: marker range {marker_range} lies outside its catalog source range.")
+                    if matched_count != len(marker_records):
+                        errors.append(f"Track {track_id}: only {matched_count}/{len(marker_records)} marker ranges matched JSON records.")
+                else:
+                    section_name = "Epílogo" if track_id == "epilogue" else "Proémio" if track_id == "proemio" else f"Chapter {track_id}"
+                    metadata_inline_count = sum(entry.get("section") == section_name for entry in metadata.get("inline_exclusions", []))
+                    if mapped is not None and mapped != metadata_inline_count:
+                        errors.append(f"Track {track_id}: manifest inline-exclusion count ({mapped}) differs from metadata ({metadata_inline_count}).")
+                    if removed is not None and removed != metadata_inline_count:
+                        errors.append(f"Track {track_id}: removed exclusion-marker count ({removed}) differs from metadata ({metadata_inline_count}).")
                 chunks = manifest.get("chunks", [])
                 if chunks:
                     if manifest.get("chunk_count") not in (None, len(chunks)):
                         errors.append(f"Track {track_id}: manifest chunk count does not match its chunk records.")
                     ceiling = min(5000, int(manifest.get("max_chunk_characters", 5000)))
+                    byte_ceiling = min(5000, int(manifest.get("max_chunk_bytes", ceiling)))
                     if any(int(chunk.get("character_count", 0)) > ceiling for chunk in chunks):
                         errors.append(f"Track {track_id}: a recorded chunk exceeds the {ceiling}-character ceiling.")
+                    if any(int(chunk.get("utf8_byte_count", 0)) > byte_ceiling for chunk in chunks):
+                        errors.append(f"Track {track_id}: a recorded chunk exceeds the {byte_ceiling}-byte ceiling.")
+                    for chunk in chunks:
+                        text = chunk.get("text")
+                        if text is not None:
+                            digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+                            if chunk.get("text_sha256") and digest != chunk["text_sha256"]:
+                                errors.append(f"Track {track_id}: chunk {chunk.get('index')} text hash mismatch.")
+                            if len(text) != int(chunk.get("character_count", len(text))):
+                                errors.append(f"Track {track_id}: chunk {chunk.get('index')} character count mismatch.")
                     if manifest.get("chapter_status") != "skipped_existing_valid" and any(chunk.get("status") != "complete" for chunk in chunks):
                         errors.append(f"Track {track_id}: one or more chunks are not complete.")
                 else:
