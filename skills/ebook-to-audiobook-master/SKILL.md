@@ -7,7 +7,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "pdf-to-epub-master"
   hermes_tags: "audiobook, TTS, Portuguese, FFmpeg, Markdown, audio"
-  version: "0.1.3"
+  version: "0.1.4"
 ---
 
 # Ebook to Audiobook Master

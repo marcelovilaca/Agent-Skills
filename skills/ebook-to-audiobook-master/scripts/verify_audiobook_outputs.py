@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 
 
@@ -88,8 +89,17 @@ def main() -> int:
         return 1
 
     expected = {match.group(1) for match in re.finditer(r"(?im)^#\s*Chapter\s+(\d+)\b[^\n]*$", source_text)}
+    book_ordinals = {"primeiro": "1", "segundo": "2", "terceiro": "3", "quarto": "4", "cinco": "5", "quinto": "5", "sexto": "6", "setimo": "7"}
+    for match in re.finditer(r"(?im)^#{1,6}\s+([^\n]+?)\s*$", source_text):
+        heading = match.group(1).strip()
+        normalized = unicodedata.normalize("NFKD", heading).encode("ascii", "ignore").decode("ascii").casefold()
+        if normalized in {"proemio", "prologo"}:
+            expected.add("proemio")
+        book = re.fullmatch(r"livro\s+(primeiro|segundo|terceiro|quarto|cinco|quinto|sexto|setimo)", normalized)
+        if book:
+            expected.add(book_ordinals[book.group(1)])
     if not expected:
-        errors.append("No numbered # Chapter headings found in the source.")
+        errors.append("No numbered Chapter, Proémio, or recognized Livro headings found in the source.")
     epilogue = re.search(r"(?im)^#\s*(Epilogue|Epílogo|Coda)\b[^\n]*$", source_text)
     if epilogue:
         labels = " ".join(str(section.get(key, "")) for section in metadata.get("excluded_sections", []) for key in ("type", "title", "heading", "section", "name")).casefold()
@@ -100,7 +110,8 @@ def main() -> int:
             expected.add("epilogue")
 
     chapters = progress.get("chapters", {})
-    missing_ids = sorted(expected - set(chapters), key=lambda item: (item == "epilogue", int(item) if item.isdigit() else 999))
+    sort_track = lambda item: (0 if item == "proemio" else 2 if item == "epilogue" else 1, int(item) if item.isdigit() else 0)
+    missing_ids = sorted(expected - set(chapters), key=sort_track)
     for track_id in missing_ids:
         errors.append(f"Missing progress entry for source track {track_id}.")
 
@@ -115,7 +126,7 @@ def main() -> int:
     # Use the skill defaults unless the user's selected engine/voice are recorded in progress.
     expected_model = progress.get("model") or "heygen/heygen-voice-1-turbo:free"
     expected_voice = progress.get("voice") or "gareth"
-    for track_id in sorted(expected, key=lambda item: (item == "epilogue", int(item) if item.isdigit() else 999)):
+    for track_id in sorted(expected, key=sort_track):
         item = chapters.get(track_id)
         if not item:
             continue
@@ -164,7 +175,7 @@ def main() -> int:
                     warnings.append(f"Track {track_id}: response format is absent from the manifest.")
                 removed = manifest.get("exclusion_markers_removed")
                 mapped = manifest.get("inline_exclusion_records_for_chapter")
-                section_name = "Epílogo" if track_id == "epilogue" else f"Chapter {track_id}"
+                section_name = "Epílogo" if track_id == "epilogue" else "Proémio" if track_id == "proemio" else f"Chapter {track_id}"
                 metadata_inline_count = sum(entry.get("section") == section_name for entry in metadata.get("inline_exclusions", []))
                 if mapped is not None and mapped != metadata_inline_count:
                     errors.append(f"Track {track_id}: manifest inline-exclusion count ({mapped}) differs from metadata ({metadata_inline_count}).")
