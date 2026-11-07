@@ -12,9 +12,9 @@
       "version": "1.0.1"
     },
     "ebook-to-audiobook-master": {
-      "source_sha256": "4f71d80f5cd739c0a0455ac33c3bfd033363385d748a6f539daff3eedbe9cfa8",
-      "updated_at": "2026-11-07T10:35:24+00:00",
-      "version": "0.1.5"
+      "source_sha256": "be95c2fd6ce984c3e9323dc57f6a8994532c6bf6aa0d45ac9a8eacb3bb5577db",
+      "updated_at": "2026-11-07T11:14:02+00:00",
+      "version": "0.1.6"
     },
     "github-skill-versioner": {
       "source_sha256": "80c4085df81829af0b8cd754b3f09089b938ae7812788a4a0a6c0488bbeef4d7",
@@ -62,5 +62,5 @@
       "version": "1.0.1"
     }
   },
-  "updated_at": "2026-11-07T10:35:24+00:00"
+  "updated_at": "2026-11-07T11:14:02+00:00"
 }
