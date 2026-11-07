@@ -37,9 +37,9 @@
       "version": "0.1.4"
     },
     "pdf-to-epub-master": {
-      "source_sha256": "7aef8a76eeed352ec954104355da5659514332041d06bddd299ad0a9824d0f49",
-      "updated_at": "2026-11-06T03:29:34+00:00",
-      "version": "0.1.2"
+      "source_sha256": "f5b35643ba6998cb67beed0725e5c9a9fbb3273b74b2858707fec06e49951565",
+      "updated_at": "2026-11-07T09:49:06+00:00",
+      "version": "0.1.3"
     },
     "react-vite-miniapp-setup": {
       "source_sha256": "ea3aac3c27432a191705b662365e0ee6dae949999237da6f52e0eeb5191f3c26",
@@ -62,5 +62,5 @@
       "version": "1.0.1"
     }
   },
-  "updated_at": "2026-11-06T16:36:54+00:00"
+  "updated_at": "2026-11-07T09:49:06+00:00"
 }

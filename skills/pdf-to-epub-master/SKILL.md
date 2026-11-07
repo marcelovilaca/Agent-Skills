@@ -6,7 +6,7 @@ compatibility: "Requires Windows."
 metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_tags: "pdf, OCR, EPUB, MOBI, translation, audiobook"
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # PDF to EPUB Master
@@ -24,7 +24,7 @@ Turn a user-provided PDF into clean Brazilian Portuguese Markdown, an EPUB, and 
 
 - Required for the PDF route: `pdf_file_path`.
 - **Existing-Markdown fast path:** If the user supplies an existing Markdown note and explicitly skips PDF-to-Markdown conversion, treat that note as the source. Resolve and verify its path, skip PDF inspection/extraction/OCR, and record that no PDF conversion occurred. Before in-place edits, preserve a backup; keep the original book's front/back matter in the edited note unless the user asks for a narration-only edition. Do not infer or fabricate missing text or bibliographic facts.
-- **Plain-text fast path:** If the user supplies a `.txt` book and explicitly asks to format it or skip OCR, use that exact file as the source; do not search for or substitute a neighboring PDF/ZIP. Preserve the original file unchanged and create a derived Markdown file plus `metadata_and_exclusions.json`. Skip PDF inspection, OCR, and translation when the text is already in the target language; record these skips and the source SHA-256. Use source line ranges, not invented page numbers. Resolve title/author from the supplied filename and text; ask only if they remain uncertain.
+- **Plain-text fast path:** If the user supplies a `.txt` book and asks to format it or skip OCR, use that exact file as the source; do not search for or substitute a neighboring PDF/ZIP. Preserve the original file unchanged and create derived Markdown plus `metadata_and_exclusions.json`. Skip PDF inspection and new OCR; skip translation only when the text is already in the target language. A TXT (including DjVu output) may itself be OCR-derived, so inspect representative text and layout zones as described in Step 1, preserve ambiguous material in JSON, and record the source SHA-256. Use source line ranges, not invented page numbers. Resolve title/author from the supplied filename and text; ask only if they remain uncertain.
 - `target_language`: Brazilian Portuguese (`pt-BR`); translate the complete narrative when the source is another language.
 - Determine author/title from the PDF metadata or title page. If either remains uncertain, ask before creating the final directory. Do not invent bibliographic facts.
 - Output root: `<AUDIOBOOKS_ROOT>\<Author Name>\<Book Title>\`. Make path components Windows-safe (replace invalid path characters) and report any substitutions.
@@ -36,7 +36,7 @@ Use `terminal` to inspect the source file and discover installed tools before pr
 
 ## Procedure
 
-1. **Route and inspect the source.** Confirm the supplied path exists and is readable. For PDF input, use a layout-aware extractor, retain page number/block text/bounding boxes, and inspect representative early, middle, and late pages; use layout-aware OCR for scans and do not silently drop unreadable pages. For the explicit plain-text fast path, read the supplied `.txt` directly, preserve its encoding/content, record its hash, and skip PDF extraction and OCR. Do not pick a different source file merely because a similarly named archive or PDF is nearby.
+1. **Route and inspect the source.** Confirm the supplied path exists and is readable. For PDF input, use a layout-aware extractor, retain page number/block text/bounding boxes, and inspect representative early, middle, and late pages; use layout-aware OCR for scans and do not silently drop unreadable pages. For the plain-text fast path, read the exact supplied `.txt`, preserve its encoding/content, record its hash, and skip PDF extraction and new OCR. Still inspect the opening, middle, ending, chapter boundaries, and figure/table zones: a supplied text dump can already contain OCR damage or garbled diagram text. Preserve uncertain or unreadable blocks verbatim in JSON with source line ranges, and disclose missing figures; do not silently repair or discard them. Do not pick a different source file merely because a similarly named archive or PDF is nearby.
 
 2. **Remove recurring artifacts conservatively.** Normalize whitespace and digit runs when comparing candidate blocks. Treat a short block as a removable header/footer only when its top/bottom position and repeated wording strongly indicate a running artifact (for example, it appears on at least three pages and on at least 25% of pages). Detect page-number-varying watermarks similarly by position and normalized text. Do not remove a passage merely because it repeats; preserve uncertain material and log it for review. Record all removed recurring strings and affected page numbers in the JSON.
 
@@ -54,13 +54,13 @@ Use `terminal` to inspect the source file and discover installed tools before pr
    ```
    Add citation notes and footnotes that remain in the narrative to `inline_exclusions` and wrap their corresponding locations in Markdown using `<!-- EXCLUDE_FROM_AUDIO: ... -->`. Keep the marker concise and ensure the full excluded note is stored in JSON. Do not put ordinary narrative sentences inside exclusion markers.
 
-5. **Format Markdown.** Write `Source\<Title>.md` as UTF-8. Use `# Chapter 1: Title` for chapters and `##` for subchapters; preserve source numbering and titles rather than inventing them. For wrapped TXT/PDF text, join hard line wraps into readable paragraphs; blank lines alone are not proof of a paragraph boundary when a sentence or hyphenated word visibly continues. Preserve intentional verse, lists, dialogue, and real paragraph breaks. Correct only unambiguous structural/OCR substitutions (for example, a damaged chapter numeral uniquely resolved by the complete chapter sequence), and log the original and replacement in JSON; do not guess at prose corrections. When this skill's verified Markdown/JSON is explicitly requested as audiobook input, hand its book directory to `ebook_to_audiobook_master`; do not start TTS until that skill's book-wide preflight passes. Use emphasis/italics only where supported by the source, and blockquotes for letters or clearly distinct inserted voices. Put `---` between major narrative sections. Ensure no isolated page numbers, running headers, or excluded front/back matter remain in the narration. Preserve citations/footnote locations as audio-exclusion comments.
+5. **Format Markdown.** Write `Source\<Title>.md` as UTF-8. Use `# Chapter 1: Title` for chapters and `##` for subchapters; preserve source numbering and titles rather than inventing them. For wrapped TXT/PDF text, join hard line wraps into readable paragraphs; blank lines alone are not proof of a paragraph boundary when a sentence or hyphenated word visibly continues. Preserve intentional verse, lists, dialogue, and real paragraph breaks. Correct only unambiguous structural/OCR substitutions (for example, a damaged chapter numeral uniquely resolved by the complete chapter sequence), and log the original, replacement, and occurrence count in JSON; do not guess at prose corrections. After formatting, compare the expected source headings with Markdown, ensure template headings are not duplicated by retained source headings, and inspect the first/last paragraphs and section transitions. When this skill's verified Markdown/JSON is explicitly requested as audiobook input, hand its book directory to `ebook_to_audiobook_master`; do not start TTS until that skill's book-wide preflight passes. Use emphasis/italics only where supported by the source, and blockquotes for letters or clearly distinct inserted voices. Put `---` between major narrative sections. Ensure no isolated page numbers, running headers, or excluded front/back matter remain in the narration. Preserve citations/footnote locations as audio-exclusion comments.
 
-6. **Build the EPUB.** Create `Ebooks\<Title>.epub` from the finished Markdown using an available EPUB generator (prefer Pandoc/EPUB 3 if present). Set title, author, and language explicitly (`pt-BR`); include a navigable chapter TOC, sensible chapter breaks, and readable typography. Do not rely on converter defaults for metadata. If Pandoc/EbookLib is unavailable but a reflowable EPUB is still required, a small Python-stdlib EPUB 3 ZIP writer is acceptable only when the package, navigation, and XHTML parse successfully, the ZIP integrity test passes, metadata is verified, and every TOC target resolves. If metadata cannot be set or a chapter is missing, correct the build before proceeding.
+6. **Build the EPUB.** Create `Ebooks\<Title>.epub` from the finished Markdown using an available EPUB generator (prefer Pandoc/EPUB 3 if present). Set title, author, and language explicitly (`pt-BR`); include a navigable chapter TOC, sensible chapter breaks, and readable typography. Do not rely on converter defaults for metadata. If Pandoc/EbookLib is unavailable but a reflowable EPUB is still required, a small Python-stdlib EPUB 3 ZIP writer is acceptable only when the package, navigation, and XHTML parse successfully, the ZIP integrity test passes, metadata is verified, and every TOC target resolves. Follow `references/stdlib-epub3-checklist.md` for package construction and content-level checks. If metadata cannot be set, a chapter is missing/duplicated, or the EPUB content diverges from the verified Markdown, correct the build before proceeding.
 
 7. **Build the MOBI.** Convert the verified EPUB to `Ebooks\<Title>.mobi` with the installed Calibre `ebook-convert` or another available EPUB-to-MOBI converter. MOBI is a legacy format and some current toolchains may no longer support it. Do not rename an EPUB or other file to `.mobi`; if conversion is unsupported, deliver the valid Markdown/JSON/EPUB and state clearly that MOBI was not created and why.
 
-8. **Verify and report.** Check that Markdown and JSON are non-empty and valid, all expected sections/exclusions are accounted for, EPUB is a readable ZIP with required package/navigation files and correct metadata, and MOBI is a real MOBI output (not a renamed file). Verify every output path and nonzero file size. Report exact paths for all files created, explicitly highlighting `metadata_and_exclusions.json`; distinguish successfully verified files from any blocked output. Do not claim completion for outputs that were not produced.
+8. **Verify and report.** Check that Markdown and JSON are non-empty and valid, all expected sections/exclusions are accounted for, and the source hash is unchanged. Compare the Markdown section list with EPUB chapters, ensuring each expected section appears once in the reading order and TOC; verify ZIP integrity, package/navigation/XML, metadata, and every TOC target. Check that footnote references remaining in visible narrative are intentionally mapped to exclusion comments (ignore reference numbers inside those comments). Verify every output path and nonzero file size, and that MOBI is a real conversion rather than a renamed file. Report exact paths for all files created, explicitly highlighting `metadata_and_exclusions.json`; distinguish verified files from blocked outputs. Do not claim completion for outputs that were not produced.
 
 ## Output Layout
 
@@ -78,16 +78,17 @@ Use the actual resolved author and title in every path. Create `Source` and `Ebo
 
 ## Pitfalls
 
-- A PDF text layer can be present but scrambled; inspect reading order and representative pages before trusting it.
+- A PDF text layer can be present but scrambled, and a supplied TXT can itself be OCR output; inspect reading order, representative passages, and diagram/table regions before trusting either.
 - Do not strip recurring text without layout-and-repeat evidence; record all removals for traceability.
-- OCR quality and translation completeness are acceptance criteria, not assumptions. Preserve uncertain text and disclose unresolved pages.
+- OCR quality and translation completeness are acceptance criteria, not assumptions. Preserve uncertain text and disclose unresolved pages or unreadable figure blocks.
+- A valid EPUB ZIP/XML package can still have missing or duplicate book content; compare its chapters and TOC against the verified Markdown.
 - EPUB and MOBI are different formats. MOBI conversion may fail on modern toolchains; report that honestly.
 - HTML comments are exclusion markers for downstream audiobook processing. Keep the full excluded text in JSON as well, so it is not lost if a converter strips comments.
 
 ## Verification Checklist
 
-- [ ] Correct input PDF; source unchanged.
-- [ ] Text extraction/OCR checked across the document; unreadable pages disclosed.
+- [ ] Correct input PDF/TXT; source unchanged and hash recorded for the text-source fast path.
+- [ ] Text extraction/OCR checked across the document; OCR-derived corruption and unreadable pages/figures disclosed.
 - [ ] Language detected; every narrative chunk translated to pt-BR when required.
 - [ ] Repeating artifacts removed only with evidence and logged.
 - [ ] Required non-narrative sections and inline notes isolated in JSON/comments.
