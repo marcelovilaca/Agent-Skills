@@ -42,9 +42,9 @@
       "version": "0.1.5"
     },
     "openrouter-video-dubber": {
-      "source_sha256": "e341a5e9fe6b9ac44a16bc4a43bec8fa21a18059008aea6085fb051b794f3f03",
-      "updated_at": "2026-11-07T17:38:31+00:00",
-      "version": "0.1.0"
+      "source_sha256": "03dbc0efcd91593b1cebe472bfcbc7d22d3655d45d9faeac9f9d65afff6ebff3",
+      "updated_at": "2026-11-07T17:47:29+00:00",
+      "version": "0.1.1"
     },
     "pdf-to-epub-master": {
       "source_sha256": "3374b5f92ab32991e7945c48ec613f4a582523d263f5031d10b15ece54228fce",
@@ -77,5 +77,5 @@
       "version": "1.0.0"
     }
   },
-  "updated_at": "2026-11-07T17:38:31+00:00"
+  "updated_at": "2026-11-07T17:47:29+00:00"
 }

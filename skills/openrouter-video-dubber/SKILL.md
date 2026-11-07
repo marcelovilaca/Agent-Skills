@@ -7,7 +7,7 @@ metadata:
   author: "marcelovilaca, Hermes Agent"
   hermes_related_skills: "local-video-dubber"
   hermes_tags: "video, dubbing, OpenRouter, ElevenLabs, transcription, voice-cloning"
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # OpenRouter Video Dubber
@@ -43,14 +43,14 @@ Use this cloud workflow only when the user explicitly invokes this skill or asks
 8. Automatically assemble 1–2 minutes of clean, non-overlapping MP3 speech per speaker (minimum 1 minute, target 2). If a speaker lacks enough usable audio, stop and ask whether to provide more audio, use a preset voice, or cancel. Before creating any ElevenLabs voices or generating TTS, report estimated voice count, characters, account usage/limits if available, and estimated time/cost; ask once for approval.
 9. Create persistent voice clones through the direct ElevenLabs API and save voice IDs. Use `eleven_v4_turbo` for TTS. Generate one short preview in the selected target language per cloned voice and wait for approval before bulk synthesis. Never delete remote voices without approval.
 10. Synthesize one request per complete speaker turn; split only turns that exceed API limits. Use at most two concurrent requests, checkpoint every success, and use bounded exponential backoff. Resume matching checkpoints and saved voice IDs; ask before overwriting an existing final MP3.
-11. Fit every turn to its original time interval, even if heavy time-stretching is needed. Assemble dubbed dialogue only (no source speech/music) into one MP3. Save all project artifacts under the configured `output_root` (default `~/Translations`); `<TRANSLATIONS_ROOT>\<safe video title>\`; use `<safe title>_(Portuguese).mp3` for the final file. Ask before any cleanup.
+11. Fit every turn to its original time interval, even if heavy time-stretching is needed. Assemble dubbed dialogue only (no source speech/music) into one MP3. Save all project artifacts under the configured `output_root` (default `~/Translations`); use `<safe title>_(Portuguese).mp3` for the final file. Ask before any cleanup.
 12. Run in the foreground; use a monitored background process only if a batch would exceed the 10-minute foreground limit. Report only milestones, not per-turn logs.
 
 ## Verification
 
 - Checkpoint and validate every expected turn; no partial dub may be reported as complete.
 - Verify the final MP3 exists, is non-empty, decodes with `ffmpeg`, and matches the source duration within encoding tolerance.
-- Keep the manifest at `<TRANSLATIONS_ROOT>\<safe title>\job.json` when the title is known; otherwise keep it in `<TRANSLATIONS_ROOT>\.jobs\<stable-id>.json`. Keep transcript, translation, speaker map, voice IDs, turn files, estimates, actual models, and verification results in the project artifacts. In chat, give a concise status, paths (including the manifest), models actually used, and the exact blocker if incomplete.
+- Keep the manifest at `<output-root>/<safe title>/job.json` when the title is known; otherwise keep it in `<job-manifest-path>`. Keep transcript, translation, speaker map, voice IDs, turn files, estimates, actual models, and verification results in the project artifacts. In chat, give a concise status, paths (including the manifest), models actually used, and the exact blocker if incomplete.
 - Ask before overwriting or deleting local artifacts; never delete ElevenLabs voices without explicit approval.
 
 ## Runner
